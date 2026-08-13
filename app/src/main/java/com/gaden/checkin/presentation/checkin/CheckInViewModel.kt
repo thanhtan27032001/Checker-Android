@@ -7,9 +7,11 @@ import com.gaden.checkin.domain.model.AttendanceStatus
 import com.gaden.checkin.domain.model.CheckInStrategy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 sealed interface CheckInUiState {
@@ -28,6 +30,9 @@ class CheckInViewModel @Inject constructor(
 ): ViewModel() {
     private val _uiState = MutableStateFlow<CheckInUiState>(CheckInUiState.Loading)
     val uiState: StateFlow<CheckInUiState> = _uiState.asStateFlow()
+
+    private val _errorEvent = Channel<String>(capacity = Channel.BUFFERED)
+    val errorEvent = _errorEvent.receiveAsFlow()
 
     init {
         loadTodayStatus()
@@ -67,12 +72,20 @@ class CheckInViewModel @Inject constructor(
                         isSubmitting = false,
                     )
                 },
-                onFailure = {
+                onFailure = { error ->
+                    _errorEvent.trySend(mapErrorToMessage(error))
                     currentState.copy(
                         isSubmitting = false
                     )
                 }
             )
+        }
+    }
+
+    private fun mapErrorToMessage(error: Throwable): String {
+        return when (error.message?.contains("Network", ignoreCase = true)) {
+            true -> "Network error"
+            else -> "Unknown error"
         }
     }
 }

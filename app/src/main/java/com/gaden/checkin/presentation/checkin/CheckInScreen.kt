@@ -20,6 +20,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,16 +47,26 @@ import java.time.format.DateTimeFormatter
 fun CheckInScreen(viewModel: CheckInViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(Unit) {
+        viewModel.errorEvent.collect { message ->
+            snackbarHostState.showSnackbar(message)
+        }
+    }
+
     CheckInContent(
         uiState,
-        viewModel::onCheckInClicked
+        viewModel::onCheckInClicked,
+        snackbarHostState
     )
 }
 
 @Composable
 fun CheckInContent(
     uiState: CheckInUiState,
-    onCheckInClicked: () -> Unit
+    onCheckInClicked: () -> Unit,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     var currentTime by remember { mutableStateOf(LocalDateTime.now()) }
 
@@ -65,7 +77,9 @@ fun CheckInContent(
         }
     }
 
-    Scaffold { paddingValues ->
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()

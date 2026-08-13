@@ -25,13 +25,14 @@ import org.junit.Test
 import kotlin.time.Clock
 
 /**
- * LƯU Ý: dùng delay() ảo + đếm số lần advanceUntilIdle()/runCurrent() để "đoán"
- * đúng thời điểm coroutine đang ở giữa chừng là cách KHÔNG ĐÁNG TIN CẬY —
- * vì MockK bọc suspend function qua nhiều lớp continuation nội bộ, số lần
- * "tick" cần thiết không cố định. Cách chắc chắn hơn: dùng CompletableDeferred
- * làm "cần gạt" thủ công — mock CHỦ ĐỘNG báo khi nó đã bắt đầu chạy, và
- * CHỜ đến khi test cho phép mới trả kết quả. Test biết chính xác 100%
- * khi nào an toàn để kiểm tra trạng thái, không phụ thuộc đếm scheduler tick.
+ * NOTE: using virtual delay() + counting advanceUntilIdle()/runCurrent() calls to "guess"
+ * exactly when a coroutine is mid-execution is UNRELIABLE —
+ * because MockK wraps suspend functions through several internal continuation layers,
+ * the number of "ticks" needed is not fixed. A more reliable approach: use
+ * CompletableDeferred as a manual "handshake" — the mock ACTIVELY signals when it has
+ * started running, and WAITS until the test allows it to return a result. The test
+ * knows with 100% certainty when it's safe to check state, without depending on
+ * scheduler tick counts.
  */
 @OptIn(ExperimentalCoroutinesApi::class)
 class CheckInViewModelTest {
@@ -51,7 +52,7 @@ class CheckInViewModelTest {
     }
 
     @Test
-    fun `khoi tao thanh cong thi trang thai la Ready va chua check-in`() = runTest {
+    fun `initial state is Ready and not checked in`() = runTest {
         val viewModel = CheckInViewModel(checkInStrategy)
         testDispatcher.scheduler.advanceUntilIdle()
 
@@ -62,7 +63,7 @@ class CheckInViewModelTest {
     }
 
     @Test
-    fun `bam check-in thanh cong thi chuyen sang trang thai CHECKED_IN`() = runTest {
+    fun `successful check-in transitions to CHECKED_IN state`() = runTest {
         val fakeRecord = AttendanceRecord(
             id = "1",
             checkinTime = Clock.System.now(),
@@ -70,8 +71,8 @@ class CheckInViewModelTest {
             method = CheckInMethod.BUTTON,
             status = AttendanceStatus.CHECKED_IN,
         )
-        // "Cần gạt" thủ công: mock báo hiệu đã được gọi (checkInCalled),
-        // rồi CHỜ tín hiệu từ test (letItFinish) mới trả kết quả.
+        // Manual "handshake": the mock signals it has been called (checkInCalled),
+        // then WAITS for a signal from the test (letItFinish) before returning a result.
         val checkInCalled = CompletableDeferred<Unit>()
         val letItFinish = CompletableDeferred<Unit>()
         coEvery { checkInStrategy.performCheckin() } coAnswers {
@@ -85,25 +86,25 @@ class CheckInViewModelTest {
 
         viewModel.onCheckInClicked()
         testDispatcher.scheduler.advanceUntilIdle()
-        checkInCalled.await() // đảm bảo strategy ĐÃ được gọi và đang chờ
+        checkInCalled.await() // ensure the strategy HAS been called and is waiting
 
-        // Tại đây chắc chắn 100%: isSubmitting=true, vì mock đang "đứng chờ"
-        // ngay bên trong performCheckin(), chưa trả kết quả.
+        // At this point it's 100% certain: isSubmitting=true, because the mock is
+        // "parked" inside performCheckin() and hasn't returned a result yet.
         val submittingState = viewModel.uiState.value as CheckInUiState.Ready
-        assertTrue("Phải hiện loading ngay khi bấm nút", submittingState.isSubmitting)
+        assertTrue("Loading must show immediately after clicking the button", submittingState.isSubmitting)
 
-        letItFinish.complete(Unit) // cho phép mock trả kết quả
+        letItFinish.complete(Unit) // allow the mock to return its result
         testDispatcher.scheduler.advanceUntilIdle()
 
         val successState = viewModel.uiState.value as CheckInUiState.Ready
         assertEquals(AttendanceStatus.CHECKED_IN, successState.status)
-        assertTrue("Loading phải tắt sau khi có kết quả", !successState.isSubmitting)
+        assertTrue("Loading must turn off once a result is received", !successState.isSubmitting)
     }
 
     @Test
-    fun `check-in that bai thi giu nguyen trang thai cu khong chuyen sang Error`() = runTest {
+    fun `failed check-in keeps the previous state instead of switching to Error`() = runTest {
         coEvery { checkInStrategy.performCheckin() } returns
-                Result.failure(RuntimeException("Network lỗi"))
+                Result.failure(RuntimeException("Network error"))
 
         val viewModel = CheckInViewModel(checkInStrategy)
         testDispatcher.scheduler.advanceUntilIdle()
@@ -112,14 +113,14 @@ class CheckInViewModelTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
         val afterFailure = viewModel.uiState.value as CheckInUiState.Ready
-        // Đây là điểm quan trọng: KHÔNG chuyển sang CheckInUiState.Error,
-        // vẫn giữ status cũ để người dùng không mất context màn hình
+        // Key point: it does NOT switch to CheckInUiState.Error,
+        // it keeps the old status so the user doesn't lose screen context
         assertEquals(AttendanceStatus.NOT_CHECKED_IN, afterFailure.status)
         assertTrue(!afterFailure.isSubmitting)
     }
 
     @Test
-    fun `bam nut khi dang submitting thi khong goi strategy lan nua`() = runTest {
+    fun `clicking the button while submitting does not call the strategy again`() = runTest {
         val fakeRecord = AttendanceRecord(
             id = "1",
             checkinTime = Clock.System.now(),
@@ -140,9 +141,9 @@ class CheckInViewModelTest {
 
         viewModel.onCheckInClicked()
         testDispatcher.scheduler.advanceUntilIdle()
-        checkInCalled.await() // đảm bảo lần bấm 1 ĐÃ vào trong strategy, đang isSubmitting=true
+        checkInCalled.await() // ensure the 1st click HAS entered the strategy and is submitting=true
 
-        viewModel.onCheckInClicked() // bấm lần 2 lúc chắc chắn đang submitting => phải bị chặn
+        viewModel.onCheckInClicked() // 2nd click while definitely submitting => must be blocked
 
         letItFinish.complete(Unit)
         testDispatcher.scheduler.advanceUntilIdle()
