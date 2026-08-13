@@ -53,7 +53,7 @@ fun CheckInScreen(viewModel: CheckInViewModel = hiltViewModel()) {
 
 @Composable
 fun CheckInContent(
-    uiState: CheckInUIState,
+    uiState: CheckInUiState,
     onCheckInClicked: () -> Unit
 ) {
     var currentTime by remember { mutableStateOf(LocalDateTime.now()) }
@@ -88,17 +88,17 @@ fun CheckInContent(
             Spacer(Modifier.height(Spacing.lg))
 
             when (uiState) {
-                is CheckInUIState.Loading -> {
+                is CheckInUiState.Loading -> {
                     CircularProgressIndicator()
                 }
-                is CheckInUIState.Ready -> {
+                is CheckInUiState.Ready -> {
                     CheckInCard(
                         status = uiState.status,
                         isSubmitting = uiState.isSubmitting,
                         onCheckInClick = onCheckInClicked,
                     )
                 }
-                is CheckInUIState.Error -> {
+                is CheckInUiState.Error -> {
                     Text(
                         text = uiState.message,
                         color = MaterialTheme.colorScheme.error,

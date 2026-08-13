@@ -2,7 +2,7 @@ package com.gaden.checkin.domain.model
 
 import kotlin.time.Instant
 
-enum class CheckinMethod {
+enum class CheckInMethod {
     BUTTON,
     GPS,
     QR,
@@ -19,7 +19,7 @@ data class AttendanceRecord(
     val id: String,
     val checkinTime: Instant?,
     val checkoutTime: Instant?,
-    val method: CheckinMethod,
+    val method: CheckInMethod,
     val status: AttendanceStatus
 ) {}
 

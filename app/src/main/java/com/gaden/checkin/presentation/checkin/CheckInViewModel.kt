@@ -12,22 +12,22 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-sealed interface CheckInUIState {
-    data object Loading : CheckInUIState
+sealed interface CheckInUiState {
+    data object Loading : CheckInUiState
     data class Ready(
         val status: AttendanceStatus,
         val lastRecord: AttendanceRecord?,
         val isSubmitting: Boolean = false,
-    ) : CheckInUIState
-    data class Error(val message: String) : CheckInUIState
+    ) : CheckInUiState
+    data class Error(val message: String) : CheckInUiState
 }
 
 @HiltViewModel
 class CheckInViewModel @Inject constructor(
     private val checkInStrategy: CheckInStrategy
 ): ViewModel() {
-    private val _uiState = MutableStateFlow<CheckInUIState>(CheckInUIState.Loading)
-    val uiState: StateFlow<CheckInUIState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<CheckInUiState>(CheckInUiState.Loading)
+    val uiState: StateFlow<CheckInUiState> = _uiState.asStateFlow()
 
     init {
         loadTodayStatus()
@@ -36,7 +36,7 @@ class CheckInViewModel @Inject constructor(
     private fun loadTodayStatus() {
         viewModelScope.launch {
             // TODO: Load today's status from repo impl
-            _uiState.value = CheckInUIState.Ready(
+            _uiState.value = CheckInUiState.Ready(
                 status = AttendanceStatus.NOT_CHECKED_IN,
                 lastRecord = null,
             )
@@ -45,7 +45,7 @@ class CheckInViewModel @Inject constructor(
 
     fun onCheckInClicked() {
         val currentState = _uiState.value
-        if (currentState !is CheckInUIState.Ready || currentState.isSubmitting) return
+        if (currentState !is CheckInUiState.Ready || currentState.isSubmitting) return
 
         viewModelScope.launch {
             val result = if (currentState.status == AttendanceStatus.NOT_CHECKED_IN) {
@@ -61,7 +61,7 @@ class CheckInViewModel @Inject constructor(
                     } else {
                         AttendanceStatus.CHECKED_IN
                     }
-                    CheckInUIState.Ready(
+                    CheckInUiState.Ready(
                         status = newStatus,
                         lastRecord = record,
                         isSubmitting = false,

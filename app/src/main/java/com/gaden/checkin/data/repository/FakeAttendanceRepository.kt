@@ -2,7 +2,7 @@ package com.gaden.checkin.data.repository
 
 import com.gaden.checkin.domain.model.AttendanceRecord
 import com.gaden.checkin.domain.model.AttendanceStatus
-import com.gaden.checkin.domain.model.CheckinMethod
+import com.gaden.checkin.domain.model.CheckInMethod
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,7 +19,7 @@ class FakeAttendanceRepository @Inject constructor() : AttendanceRepository {
 
     private var lastRecord: AttendanceRecord? = null
 
-    override suspend fun checkIn(method: CheckinMethod): Result<AttendanceRecord> {
+    override suspend fun checkIn(method: CheckInMethod): Result<AttendanceRecord> {
         delay(800) // giả lập độ trễ network, để thấy loading spinner hoạt động
         val record = AttendanceRecord(
             id = "fake-${System.currentTimeMillis()}",
@@ -32,7 +32,7 @@ class FakeAttendanceRepository @Inject constructor() : AttendanceRepository {
         return Result.success(record)
     }
 
-    override suspend fun checkout(method: CheckinMethod): Result<AttendanceRecord> {
+    override suspend fun checkout(method: CheckInMethod): Result<AttendanceRecord> {
         delay(800)
         val current = lastRecord ?: return Result.failure(IllegalStateException("Chưa check-in"))
         val record = current.copy(
