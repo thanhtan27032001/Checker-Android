@@ -13,7 +13,7 @@
 - [x] 🟢 Hiểu state hoisting, phân biệt Composable stateful/stateless
 - [x] 🟢 Thiết kế Design System: màu (`Color.kt`), typography (`Type.kt`), spacing (`Dimens.kt`), theme tổng (`Theme.kt`)
 - [x] 🟢 Mở rộng theme cho semantic color nghiệp vụ (`AttendanceColors.kt` — onTime/late/absent/onLeave)
-- [ ] ⚪ Setup Version Catalog (`libs.versions.toml`) đầy đủ: Hilt, Retrofit, Room, Navigation, Coroutines
+- [x] ⚪ Setup Version Catalog (`libs.versions.toml`) đầy đủ: Hilt, Retrofit, Room, Navigation, Coroutines
 - [ ] ⚪ Setup package structure chuẩn: `domain/`, `data/`, `presentation/`, `di/`
 - [ ] ⚪ Tải + tích hợp font Be Vietnam Pro vào `res/font/`
 - [ ] ⚪ Setup Git repo, `.gitignore` chuẩn Android, branch strategy (main/develop)

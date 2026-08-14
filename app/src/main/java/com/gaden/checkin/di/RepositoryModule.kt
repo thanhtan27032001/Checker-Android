@@ -1,8 +1,8 @@
 package com.gaden.checkin.di
 
-import com.gaden.checkin.data.repository.AttendanceRepository
-import com.gaden.checkin.data.repository.ButtonCheckInStrategy
-import com.gaden.checkin.data.repository.FakeAttendanceRepository
+import com.gaden.checkin.domain.repository.AttendanceRepository
+import com.gaden.checkin.domain.repository.ButtonCheckInStrategy
+import com.gaden.checkin.domain.repository.FakeAttendanceRepository
 import com.gaden.checkin.domain.model.CheckInStrategy
 import dagger.Binds
 import dagger.Module

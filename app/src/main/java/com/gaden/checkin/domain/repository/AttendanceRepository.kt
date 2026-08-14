@@ -1,4 +1,4 @@
-package com.gaden.checkin.data.repository
+package com.gaden.checkin.domain.repository
 
 import com.gaden.checkin.domain.model.AttendanceRecord
 import com.gaden.checkin.domain.model.CheckInStrategy
