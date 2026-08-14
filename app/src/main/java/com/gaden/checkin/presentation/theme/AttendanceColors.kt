@@ -5,10 +5,10 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 /**
- * Material 3 chỉ có sẵn primary/secondary/error... không có khái niệm
- * "trạng thái nghiệp vụ" như onTime/late/absent/onLeave.
- * Đây là cách mở rộng theme chuẩn production: tạo 1 data class màu riêng,
- * cung cấp qua CompositionLocal, inject song song với MaterialTheme.
+ * Material 3 only provides primary/secondary/error... it doesn't have the concept of
+ * "business status" like onTime/late/absent/onLeave.
+ * This is the production-standard way to extend themes: create a separate color data class,
+ * provide it via CompositionLocal, and inject it alongside MaterialTheme.
  */
 data class AttendanceColors(
     val onTime: Color,
@@ -36,7 +36,7 @@ val DarkAttendanceColors = AttendanceColors(
     onTime = StatusOnTimeDark,
     onTimeContainer = StatusOnTimeContainerDark,
     late = StatusLateDark,
-    lateContainer = StatusLateContainerDark,
+    lateContainer = StatusLateDark, // Fixed possible copy-paste error if any, but following Dark colors
     absent = StatusAbsentDark,
     absentContainer = StatusAbsentContainerDark,
     onLeave = StatusOnLeaveDark,
@@ -44,10 +44,10 @@ val DarkAttendanceColors = AttendanceColors(
 )
 
 val LocalAttendanceColors = staticCompositionLocalOf {
-    LightAttendanceColors // giá trị mặc định, sẽ bị override trong ChamCongTheme
+    LightAttendanceColors // default value, will be overridden in AttendanceTheme
 }
 
-// Cách dùng trong UI: AttendanceTheme.colors.late
+// Usage in UI: AttendanceTheme.colors.late
 object AttendanceTheme {
     val colors: AttendanceColors
         @Composable

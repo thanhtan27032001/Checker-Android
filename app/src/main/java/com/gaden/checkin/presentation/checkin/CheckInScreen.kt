@@ -91,7 +91,7 @@ fun CheckInContent(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
-                title = { Text("Chấm công") },
+                title = { Text("Attendance") },
                 actions = {
                     IconButton(
                         onClick = onHistoryClicked
@@ -191,9 +191,9 @@ private fun CheckInCard(
                 } else {
                     Text(
                         text = when (status) {
-                            AttendanceStatus.NOT_CHECKED_IN -> "Chấm công vào"
-                            AttendanceStatus.CHECKED_IN -> "Chấm công ra"
-                            AttendanceStatus.CHECKED_OUT -> "Đã hoàn tất hôm nay"
+                            AttendanceStatus.NOT_CHECKED_IN -> "Check In"
+                            AttendanceStatus.CHECKED_IN -> "Check Out"
+                            AttendanceStatus.CHECKED_OUT -> "Completed for today"
                         },
                     )
                 }
@@ -225,7 +225,7 @@ private fun StatusIcon(status: AttendanceStatus) {
 }
 
 private fun statusLabel(status: AttendanceStatus): String = when (status) {
-    AttendanceStatus.NOT_CHECKED_IN -> "Chưa chấm công vào"
-    AttendanceStatus.CHECKED_IN -> "Đang trong ca làm việc"
-    AttendanceStatus.CHECKED_OUT -> "Đã chấm công ra"
+    AttendanceStatus.NOT_CHECKED_IN -> "Not checked in yet"
+    AttendanceStatus.CHECKED_IN -> "Currently in working shift"
+    AttendanceStatus.CHECKED_OUT -> "Already checked out"
 }

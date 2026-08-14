@@ -9,7 +9,7 @@ import com.gaden.checkin.presentation.theme.CheckinTheme
 import kotlin.time.Clock
 
 
-@Preview(showBackground = true, name = "Chưa check-in")
+@Preview(showBackground = true, name = "Not checked in")
 @Composable
 private fun CheckInContentNotCheckedInPreview() {
     CheckinTheme {
@@ -24,7 +24,7 @@ private fun CheckInContentNotCheckedInPreview() {
     }
 }
 
-@Preview(showBackground = true, name = "Đã check-in")
+@Preview(showBackground = true, name = "Checked in")
 @Composable
 private fun CheckInContentCheckedInPreview() {
     CheckinTheme {
@@ -45,7 +45,7 @@ private fun CheckInContentCheckedInPreview() {
     }
 }
 
-@Preview(showBackground = true, name = "Đang submit (loading)")
+@Preview(showBackground = true, name = "Submitting (loading)")
 @Composable
 private fun CheckInContentSubmittingPreview() {
     CheckinTheme {
@@ -61,7 +61,7 @@ private fun CheckInContentSubmittingPreview() {
     }
 }
 
-@Preview(showBackground = true, name = "Loading ban đầu")
+@Preview(showBackground = true, name = "Initial loading")
 @Composable
 private fun CheckInContentLoadingPreview() {
     CheckinTheme {
