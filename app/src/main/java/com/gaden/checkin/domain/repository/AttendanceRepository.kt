@@ -9,6 +9,7 @@ interface AttendanceRepository {
     suspend fun checkIn(method: CheckInMethod): Result<AttendanceRecord>
     suspend fun checkout(method: CheckInMethod): Result<AttendanceRecord>
     suspend fun getTodayStatus(): AttendanceRecord?
+    suspend fun getMonthRecords(year: Int, month: Int): Map<Int, AttendanceRecord>
 }
 
 class ButtonCheckInStrategy @Inject constructor (

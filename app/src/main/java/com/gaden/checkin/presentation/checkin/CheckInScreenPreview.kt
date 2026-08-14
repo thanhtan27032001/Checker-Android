@@ -19,6 +19,7 @@ private fun CheckInContentNotCheckedInPreview() {
                 lastRecord = null,
             ),
             onCheckInClicked = {},
+            onHistoryClicked = {},
         )
     }
 }
@@ -39,6 +40,7 @@ private fun CheckInContentCheckedInPreview() {
                 ),
             ),
             onCheckInClicked = {},
+            onHistoryClicked = {},
         )
     }
 }
@@ -54,6 +56,7 @@ private fun CheckInContentSubmittingPreview() {
                 isSubmitting = true,
             ),
             onCheckInClicked = {},
+            onHistoryClicked = {},
         )
     }
 }
@@ -65,6 +68,7 @@ private fun CheckInContentLoadingPreview() {
         CheckInContent(
             uiState = CheckInUiState.Loading,
             onCheckInClicked = {},
+            onHistoryClicked = {},
         )
     }
 }

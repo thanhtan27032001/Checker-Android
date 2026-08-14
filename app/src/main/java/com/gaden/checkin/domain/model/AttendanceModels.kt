@@ -20,7 +20,8 @@ data class AttendanceRecord(
     val checkinTime: Instant?,
     val checkoutTime: Instant?,
     val method: CheckInMethod,
-    val status: AttendanceStatus
+    val status: AttendanceStatus,
+    val isLate: Boolean = false,
 ) {}
 
 interface CheckInStrategy {

@@ -12,17 +12,21 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -44,7 +48,10 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun CheckInScreen(viewModel: CheckInViewModel = hiltViewModel()) {
+fun CheckInScreen(
+    viewModel: CheckInViewModel = hiltViewModel(),
+    onHistoryClicked: () -> Unit,
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -58,15 +65,18 @@ fun CheckInScreen(viewModel: CheckInViewModel = hiltViewModel()) {
     CheckInContent(
         uiState,
         viewModel::onCheckInClicked,
-        snackbarHostState
+        snackbarHostState,
+        onHistoryClicked
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CheckInContent(
     uiState: CheckInUiState,
     onCheckInClicked: () -> Unit,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    onHistoryClicked: () -> Unit
 ) {
     var currentTime by remember { mutableStateOf(LocalDateTime.now()) }
 
@@ -78,7 +88,19 @@ fun CheckInContent(
     }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) }
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        topBar = {
+            TopAppBar(
+                title = { Text("Chấm công") },
+                actions = {
+                    IconButton(
+                        onClick = onHistoryClicked
+                    ) {
+                        Icon(Icons.Filled.History, contentDescription = "History")
+                    }
+                }
+            )
+        }
     ) { paddingValues ->
         Column(
             modifier = Modifier
