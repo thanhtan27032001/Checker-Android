@@ -68,8 +68,8 @@ fun HistoryScreen(
     HistoryContent(
         uiState = uiState,
         onBackClicked = onBackClicked,
-        onPreviousMonthClicked = { viewModel.loadMonth(viewModel.currentYearMonth.minusMonths(1)) },
-        onNextMonthClicked = { viewModel.loadMonth(viewModel.currentYearMonth.plusMonths(1)) },
+        onPreviousMonthClicked = { viewModel.goToPreviousMonth() },
+        onNextMonthClicked = { viewModel.goToNextMonth() },
     )
 }
 

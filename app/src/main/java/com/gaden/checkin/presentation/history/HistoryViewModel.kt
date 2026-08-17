@@ -50,4 +50,7 @@ class HistoryViewModel @Inject constructor (
             }
         }
     }
+
+    fun goToPreviousMonth() = loadMonth(currentYearMonth.minusMonths(1))
+    fun goToNextMonth() = loadMonth(currentYearMonth.plusMonths(1))
 }
