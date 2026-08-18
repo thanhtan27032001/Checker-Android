@@ -20,7 +20,8 @@ private fun CheckInContentNotCheckedInPreview() {
             ),
             onCheckInClicked = {},
             onHistoryClicked = {},
-            onLeaveClicked = {}
+            onLeaveClicked = {},
+            onDashboardClick = {},
         )
     }
 }
@@ -42,7 +43,8 @@ private fun CheckInContentCheckedInPreview() {
             ),
             onCheckInClicked = {},
             onHistoryClicked = {},
-            onLeaveClicked = {}
+            onLeaveClicked = {},
+            onDashboardClick = {},
         )
     }
 }
@@ -60,6 +62,7 @@ private fun CheckInContentSubmittingPreview() {
             onCheckInClicked = {},
             onHistoryClicked = {},
             onLeaveClicked = {},
+            onDashboardClick = {},
         )
     }
 }
@@ -73,6 +76,7 @@ private fun CheckInContentLoadingPreview() {
             onCheckInClicked = {},
             onHistoryClicked = {},
             onLeaveClicked = {},
+            onDashboardClick = {},
         )
     }
 }

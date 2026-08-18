@@ -4,8 +4,10 @@ import com.gaden.checkin.data.ButtonCheckInStrategy
 import com.gaden.checkin.domain.model.AttendanceRepository
 import com.gaden.checkin.domain.repository.FakeAttendanceRepository
 import com.gaden.checkin.domain.model.CheckInStrategy
+import com.gaden.checkin.domain.model.DashboardRepository
 import com.gaden.checkin.domain.repository.FakeLeaveRepository
 import com.gaden.checkin.domain.model.LeaveRepository
+import com.gaden.checkin.domain.repository.FakeDashboardRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -22,4 +24,7 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindLeaveRepository(impl: FakeLeaveRepository): LeaveRepository
+
+    @Binds
+    abstract fun bindDashboardRepository(impl: FakeDashboardRepository): DashboardRepository
 }

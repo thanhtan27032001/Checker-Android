@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Schedule
@@ -53,6 +54,7 @@ fun CheckInScreen(
     viewModel: CheckInViewModel = hiltViewModel(),
     onHistoryClicked: () -> Unit,
     onLeaveClicked: () -> Unit,
+    onDashboardClick: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -70,6 +72,7 @@ fun CheckInScreen(
         snackbarHostState,
         onHistoryClicked,
         onLeaveClicked,
+        onDashboardClick,
     )
 }
 
@@ -81,6 +84,7 @@ fun CheckInContent(
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     onHistoryClicked: () -> Unit,
     onLeaveClicked: () -> Unit,
+    onDashboardClick: () -> Unit,
 ) {
     var currentTime by remember { mutableStateOf(LocalDateTime.now()) }
 
@@ -97,6 +101,9 @@ fun CheckInContent(
             TopAppBar(
                 title = { Text("Attendance") },
                 actions = {
+                    IconButton(onClick = onDashboardClick) {
+                        Icon(Icons.Filled.Dashboard, contentDescription = "Dashboard (Test only)")
+                    }
                     IconButton(
                         onClick = onLeaveClicked
                     ) {
