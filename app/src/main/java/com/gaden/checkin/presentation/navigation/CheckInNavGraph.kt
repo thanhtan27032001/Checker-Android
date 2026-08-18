@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.gaden.checkin.presentation.checkin.CheckInScreen
 import com.gaden.checkin.presentation.history.HistoryScreen
+import com.gaden.checkin.presentation.leave.LeaveScreen
 
 @Composable
 fun CheckInNavGraph(
@@ -18,12 +19,18 @@ fun CheckInNavGraph(
     ) {
         composable(Screen.CheckIn.route) {
             CheckInScreen(
-                onHistoryClicked = { navHostController.navigate(Screen.History.route) }
+                onHistoryClicked = { navHostController.navigate(Screen.History.route) },
+                onLeaveClicked = { navHostController.navigate(Screen.Leave.route) }
             )
         }
         composable(Screen.History.route) {
             HistoryScreen(
                 onBackClicked = { navHostController.popBackStack() }
+            )
+        }
+        composable(Screen.Leave.route) {
+            LeaveScreen(
+                onBackClicked = { navHostController.popBackStack() },
             )
         }
     }

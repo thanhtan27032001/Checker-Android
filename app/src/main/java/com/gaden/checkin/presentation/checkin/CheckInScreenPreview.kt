@@ -20,6 +20,7 @@ private fun CheckInContentNotCheckedInPreview() {
             ),
             onCheckInClicked = {},
             onHistoryClicked = {},
+            onLeaveClicked = {}
         )
     }
 }
@@ -41,6 +42,7 @@ private fun CheckInContentCheckedInPreview() {
             ),
             onCheckInClicked = {},
             onHistoryClicked = {},
+            onLeaveClicked = {}
         )
     }
 }
@@ -57,6 +59,7 @@ private fun CheckInContentSubmittingPreview() {
             ),
             onCheckInClicked = {},
             onHistoryClicked = {},
+            onLeaveClicked = {},
         )
     }
 }
@@ -69,6 +72,7 @@ private fun CheckInContentLoadingPreview() {
             uiState = CheckInUiState.Loading,
             onCheckInClicked = {},
             onHistoryClicked = {},
+            onLeaveClicked = {},
         )
     }
 }

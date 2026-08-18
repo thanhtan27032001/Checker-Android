@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Button
@@ -51,6 +52,7 @@ import java.time.format.DateTimeFormatter
 fun CheckInScreen(
     viewModel: CheckInViewModel = hiltViewModel(),
     onHistoryClicked: () -> Unit,
+    onLeaveClicked: () -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -66,7 +68,8 @@ fun CheckInScreen(
         uiState,
         viewModel::onCheckInClicked,
         snackbarHostState,
-        onHistoryClicked
+        onHistoryClicked,
+        onLeaveClicked,
     )
 }
 
@@ -76,7 +79,8 @@ fun CheckInContent(
     uiState: CheckInUiState,
     onCheckInClicked: () -> Unit,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
-    onHistoryClicked: () -> Unit
+    onHistoryClicked: () -> Unit,
+    onLeaveClicked: () -> Unit,
 ) {
     var currentTime by remember { mutableStateOf(LocalDateTime.now()) }
 
@@ -93,6 +97,11 @@ fun CheckInContent(
             TopAppBar(
                 title = { Text("Attendance") },
                 actions = {
+                    IconButton(
+                        onClick = onLeaveClicked
+                    ) {
+                        Icon(Icons.Filled.Event, contentDescription = "Leave")
+                    }
                     IconButton(
                         onClick = onHistoryClicked
                     ) {

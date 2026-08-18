@@ -5,4 +5,5 @@ sealed class Screen(
 ) {
     data object CheckIn: Screen("checkin")
     data object History: Screen("history")
+    data object Leave : Screen("leave")
 }
