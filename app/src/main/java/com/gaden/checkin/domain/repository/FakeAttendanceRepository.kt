@@ -1,6 +1,7 @@
 package com.gaden.checkin.domain.repository
 
 import com.gaden.checkin.domain.model.AttendanceRecord
+import com.gaden.checkin.domain.model.AttendanceRepository
 import com.gaden.checkin.domain.model.AttendanceStatus
 import com.gaden.checkin.domain.model.CheckInMethod
 import kotlinx.coroutines.delay

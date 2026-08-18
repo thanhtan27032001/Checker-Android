@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gaden.checkin.domain.model.LeaveRequest
 import com.gaden.checkin.domain.model.LeaveType
-import com.gaden.checkin.domain.repository.LeaveRepository
+import com.gaden.checkin.domain.model.LeaveRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

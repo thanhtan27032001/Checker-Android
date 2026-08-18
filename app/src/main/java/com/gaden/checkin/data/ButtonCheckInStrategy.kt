@@ -11,8 +11,8 @@ import com.gaden.checkin.data.local.PendingActionType
 import com.gaden.checkin.data.local.PendingAttendanceDao
 import com.gaden.checkin.data.local.PendingAttendanceEntity
 import com.gaden.checkin.data.local.SyncAttendanceWorker
-import com.gaden.checkin.domain.repository.AttendanceRepository
 import com.gaden.checkin.domain.model.AttendanceRecord
+import com.gaden.checkin.domain.model.AttendanceRepository
 import com.gaden.checkin.domain.model.CheckInMethod
 import com.gaden.checkin.domain.model.CheckInStrategy
 import dagger.hilt.android.qualifiers.ApplicationContext

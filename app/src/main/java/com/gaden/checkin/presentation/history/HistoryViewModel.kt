@@ -3,7 +3,7 @@ package com.gaden.checkin.presentation.history
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gaden.checkin.domain.model.AttendanceRecord
-import com.gaden.checkin.domain.repository.AttendanceRepository
+import com.gaden.checkin.domain.model.AttendanceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

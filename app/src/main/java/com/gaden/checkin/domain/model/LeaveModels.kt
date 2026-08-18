@@ -19,3 +19,14 @@ data class LeaveRequest(
     val status: LeaveStatus,
     val submittedAt: Instant,
 )
+
+interface LeaveRepository {
+    suspend fun submitLeaveRequest(
+        type: LeaveType,
+        startDateEpochDay: Long,
+        endDateEpochDay: Long,
+        reason: String,
+    ): Result<LeaveRequest>
+
+    suspend fun getLeaveRequests(): List<LeaveRequest>
+}

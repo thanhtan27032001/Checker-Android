@@ -1,5 +1,6 @@
 package com.gaden.checkin.domain.repository
 
+import com.gaden.checkin.domain.model.LeaveRepository
 import com.gaden.checkin.domain.model.LeaveRequest
 import com.gaden.checkin.domain.model.LeaveStatus
 import com.gaden.checkin.domain.model.LeaveType
