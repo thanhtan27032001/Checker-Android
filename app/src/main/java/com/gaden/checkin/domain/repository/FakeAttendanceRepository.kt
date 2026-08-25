@@ -28,7 +28,7 @@ class FakeAttendanceRepository @Inject constructor() : AttendanceRepository {
         return Result.success(record)
     }
 
-    override suspend fun checkout(method: CheckInMethod): Result<AttendanceRecord> {
+    override suspend fun checkOut(method: CheckInMethod): Result<AttendanceRecord> {
         delay(800)
         val current = lastRecord ?: return Result.failure(IllegalStateException("Not checked in yet"))
         val record = current.copy(

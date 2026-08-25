@@ -38,7 +38,7 @@ class ButtonCheckInStrategy @Inject constructor(
         return executeWithOfflineFallback(
             PendingActionType.CHECK_OUT
         ) {
-            repository.checkout(CheckInMethod.BUTTON)
+            repository.checkOut(CheckInMethod.BUTTON)
         }
     }
 

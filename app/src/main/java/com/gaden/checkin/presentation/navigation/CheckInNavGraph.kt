@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.gaden.checkin.presentation.auth.LoginScreen
 import com.gaden.checkin.presentation.checkin.CheckInScreen
 import com.gaden.checkin.presentation.dashboard.DashboardScreen
 import com.gaden.checkin.presentation.history.HistoryScreen
@@ -16,8 +17,13 @@ fun CheckInNavGraph(
 ) {
     return NavHost(
         navController = navHostController,
-        startDestination = Screen.CheckIn.route,
+        startDestination = Screen.Login.route,
     ) {
+        composable(Screen.Login.route) {
+            LoginScreen(
+                onLoginSuccess = { navHostController.navigate(Screen.CheckIn.route) }
+            )
+        }
         composable(Screen.CheckIn.route) {
             CheckInScreen(
                 onHistoryClicked = { navHostController.navigate(Screen.History.route) },
