@@ -29,6 +29,9 @@ class LoginViewModel @Inject constructor(
     private val _loginSuccessEvent: Channel<String> = Channel()
     val loginSuccessEvent = _loginSuccessEvent.receiveAsFlow()
 
+    private val _loginErrorEvent: Channel<String> = Channel()
+    val loginErrorEvent = _loginErrorEvent.receiveAsFlow()
+
     fun onEmailChange(v: String) { _uiState.value = _uiState.value.copy(email = v) }
     fun onPasswordChange(v: String) { _uiState.value = _uiState.value.copy(password = v) }
 
@@ -42,7 +45,9 @@ class LoginViewModel @Inject constructor(
                     onSuccess = {
                         _loginSuccessEvent.send("Login success")
                     },
-                    onFailure = {},
+                    onFailure = {
+                        _loginErrorEvent.send(it.message ?: "Login failed")
+                    },
                 )
 
             _uiState.value = _uiState.value.copy(isLoading = false)

@@ -10,6 +10,7 @@ import com.gaden.checkin.presentation.checkin.CheckInScreen
 import com.gaden.checkin.presentation.dashboard.DashboardScreen
 import com.gaden.checkin.presentation.history.HistoryScreen
 import com.gaden.checkin.presentation.leave.LeaveScreen
+import com.gaden.checkin.presentation.splash.SplashScreen
 
 @Composable
 fun CheckInNavGraph(
@@ -17,11 +18,27 @@ fun CheckInNavGraph(
 ) {
     return NavHost(
         navController = navHostController,
-        startDestination = Screen.Login.route,
+        startDestination = Screen.Splash.route,
     ) {
+        composable(Screen.Splash.route) {
+            SplashScreen(
+                onNavigateToLogin = {
+                    navHostController.navigate(Screen.Login.route) {
+                        popUpTo(Screen.Splash.route) { inclusive = true }
+                    }
+                },
+                onNavigateToCheckIn = {
+                    navHostController.navigate(Screen.CheckIn.route) {
+                        popUpTo(Screen.Splash.route) { inclusive = true }
+                    }
+                },
+            )
+        }
         composable(Screen.Login.route) {
             LoginScreen(
-                onLoginSuccess = { navHostController.navigate(Screen.CheckIn.route) }
+                onLoginSuccess = { navHostController.navigate(Screen.CheckIn.route) {
+                    popUpTo(Screen.Login.route) { inclusive = true }
+                } }
             )
         }
         composable(Screen.CheckIn.route) {

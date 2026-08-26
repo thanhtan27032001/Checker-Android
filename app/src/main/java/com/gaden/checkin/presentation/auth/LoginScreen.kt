@@ -15,22 +15,33 @@ fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
         viewModel.loginSuccessEvent.collect { onLoginSuccess() }
     }
 
-    Column(modifier = Modifier.fillMaxSize().padding(24.dp), verticalArrangement = Arrangement.Center) {
-        OutlinedTextField(uiState.email, viewModel::onEmailChange, label = { Text("Email") })
-        Spacer(Modifier.height(12.dp))
-        OutlinedTextField(
-            uiState.password, viewModel::onPasswordChange,
-            label = { Text("Password") },
-            visualTransformation = PasswordVisualTransformation(),
-        )
-        Spacer(Modifier.height(16.dp))
-        Button(onClick = viewModel::onLoginClick, enabled = !uiState.isLoading) {
-            Text(if (uiState.isLoading) "Logging..." else "Login")
+    LaunchedEffect(Unit) {
+        viewModel.loginErrorEvent.collect { message ->
+            snackbarHostState.showSnackbar(message)
+        }
+    }
+
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+    ) { padding ->
+        Column(modifier = Modifier.fillMaxSize().padding(padding), verticalArrangement = Arrangement.Center) {
+            OutlinedTextField(uiState.email, viewModel::onEmailChange, label = { Text("Email") })
+            Spacer(Modifier.height(12.dp))
+            OutlinedTextField(
+                uiState.password, viewModel::onPasswordChange,
+                label = { Text("Password") },
+                visualTransformation = PasswordVisualTransformation(),
+            )
+            Spacer(Modifier.height(16.dp))
+            Button(onClick = viewModel::onLoginClick, enabled = !uiState.isLoading) {
+                Text(if (uiState.isLoading) "Logging..." else "Login")
+            }
         }
     }
 }

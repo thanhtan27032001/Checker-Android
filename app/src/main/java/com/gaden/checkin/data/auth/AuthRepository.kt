@@ -1,6 +1,5 @@
 package com.gaden.checkin.data.auth
 
-import coil.util.Logger
 import com.gaden.checkin.data.remote.ApiService
 import com.gaden.checkin.data.remote.dto.LoginRequest
 import javax.inject.Inject

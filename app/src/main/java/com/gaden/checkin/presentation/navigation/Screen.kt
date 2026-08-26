@@ -3,6 +3,7 @@ package com.gaden.checkin.presentation.navigation
 sealed class Screen(
     val route: String,
 ) {
+    data object Splash: Screen(route = "splash")
     data object Login: Screen("login")
     data object CheckIn: Screen("checkin")
     data object History: Screen("history")
