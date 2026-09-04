@@ -24,7 +24,7 @@ sealed class HistoryUiState {
 class HistoryViewModel @Inject constructor (
     private val repository: AttendanceRepository,
 ): ViewModel() {
-    var currentYearMonth = YearMonth.now()
+    var currentYearMonth: YearMonth = YearMonth.now()
 
     private val _uiState = MutableStateFlow<HistoryUiState>(HistoryUiState.Loading)
     val uiState: StateFlow<HistoryUiState> = _uiState.asStateFlow()
@@ -38,14 +38,24 @@ class HistoryViewModel @Inject constructor (
         _uiState.value = HistoryUiState.Loading
 
         viewModelScope.launch {
-            val records = repository.getMonthRecords(
-                year = currentYearMonth.year,
-                month = currentYearMonth.monthValue,
-            )
             if (currentYearMonth == yearMonth) {
-                _uiState.value = HistoryUiState.Ready(
-                    yearMonth,
-                    records
+                val records = repository.getMonthRecords(
+                    year = currentYearMonth.year,
+                    month = currentYearMonth.monthValue,
+                )
+                records.fold(
+                    onFailure = {
+                        _uiState.value = HistoryUiState.Ready(
+                            yearMonth,
+                            emptyMap()
+                        )
+                    },
+                    onSuccess = { records ->
+                        _uiState.value = HistoryUiState.Ready(
+                            yearMonth,
+                            records
+                        )
+                    }
                 )
             }
         }

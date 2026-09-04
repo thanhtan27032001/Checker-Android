@@ -2,8 +2,10 @@ package com.gaden.checkin.data.mapper
 
 import com.gaden.checkin.data.remote.dto.AttendanceResponse
 import com.gaden.checkin.data.remote.dto.AttendanceResponseStatus
+import com.gaden.checkin.data.remote.dto.AttendanceTodayResponse
 import com.gaden.checkin.domain.model.AttendanceRecord
 import com.gaden.checkin.domain.model.AttendanceStatus
+import com.gaden.checkin.domain.model.AttendanceToday
 import com.gaden.checkin.domain.model.CheckInMethod
 import com.gaden.checkin.domain.model.CheckInMethod.BUTTON
 import com.gaden.checkin.domain.model.CheckInMethod.FACE
@@ -31,6 +33,14 @@ fun AttendanceResponse.toDomain(): AttendanceRecord {
         method = method,
         status = status,
         isLate = isLate
+    )
+}
+
+fun AttendanceTodayResponse.toDomain(): AttendanceToday {
+    return AttendanceToday(
+        hasCheckIn = this.hasCheckIn,
+        hasCheckOut = this.hasCheckOut,
+        record = this.record?.toDomain()
     )
 }
 

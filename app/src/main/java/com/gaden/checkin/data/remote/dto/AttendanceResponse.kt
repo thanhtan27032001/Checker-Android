@@ -1,5 +1,6 @@
 package com.gaden.checkin.data.remote.dto
 
+import com.gaden.checkin.domain.model.AttendanceRecord
 import kotlinx.serialization.Serializable
 
 enum class AttendanceResponseStatus {
@@ -18,3 +19,10 @@ data class AttendanceResponse(
     val workedHours: Double?
 ) {
 }
+
+@Serializable
+data class AttendanceTodayResponse(
+    val hasCheckIn: Boolean,
+    val hasCheckOut: Boolean,
+    val record: AttendanceResponse?,
+)

@@ -2,7 +2,9 @@ package com.gaden.checkin.presentation.checkin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gaden.checkin.data.auth.TokenManager
 import com.gaden.checkin.domain.model.AttendanceRecord
+import com.gaden.checkin.domain.model.AttendanceRepository
 import com.gaden.checkin.domain.model.AttendanceStatus
 import com.gaden.checkin.domain.model.CheckInStrategy
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,7 +28,8 @@ sealed interface CheckInUiState {
 
 @HiltViewModel
 class CheckInViewModel @Inject constructor(
-    private val checkInStrategy: CheckInStrategy
+    private val checkInStrategy: CheckInStrategy,
+    private val attendanceRepository: AttendanceRepository,
 ): ViewModel() {
     private val _uiState = MutableStateFlow<CheckInUiState>(CheckInUiState.Loading)
     val uiState: StateFlow<CheckInUiState> = _uiState.asStateFlow()
@@ -39,12 +42,32 @@ class CheckInViewModel @Inject constructor(
     }
 
     private fun loadTodayStatus() {
+        _uiState.value = CheckInUiState.Loading
         viewModelScope.launch {
-            // TODO: Load today's status from repo impl
-            _uiState.value = CheckInUiState.Ready(
-                status = AttendanceStatus.NOT_CHECKED_IN,
-                lastRecord = null,
-            )
+            attendanceRepository
+                .getTodayStatus()
+                .fold(
+                    onSuccess = { todayStatus ->
+                        val status = if (todayStatus?.hasCheckOut == true) {
+                            AttendanceStatus.CHECKED_OUT
+                        } else if (todayStatus?.hasCheckIn == true) {
+                            AttendanceStatus.CHECKED_IN
+                        } else {
+                            AttendanceStatus.NOT_CHECKED_IN
+                        }
+                        _uiState.value = CheckInUiState.Ready(
+                            status = status,
+                            lastRecord = todayStatus?.record,
+                        )
+                    },
+                    onFailure = {
+                        _uiState.value = CheckInUiState.Ready(
+                            status = AttendanceStatus.NOT_CHECKED_IN,
+                            lastRecord = null,
+                        )
+                    }
+                )
+
         }
     }
 

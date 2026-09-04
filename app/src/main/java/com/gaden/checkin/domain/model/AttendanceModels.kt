@@ -24,6 +24,12 @@ data class AttendanceRecord(
     val isLate: Boolean = false,
 )
 
+data class AttendanceToday(
+    val hasCheckIn: Boolean,
+    val hasCheckOut: Boolean,
+    val record: AttendanceRecord?,
+)
+
 interface CheckInStrategy {
     suspend fun performCheckin(): Result<AttendanceRecord>
     suspend fun performCheckout(): Result<AttendanceRecord>
@@ -32,6 +38,6 @@ interface CheckInStrategy {
 interface AttendanceRepository {
     suspend fun checkIn(method: CheckInMethod): Result<AttendanceRecord>
     suspend fun checkOut(method: CheckInMethod): Result<AttendanceRecord>
-    suspend fun getTodayStatus(): AttendanceRecord?
-    suspend fun getMonthRecords(year: Int, month: Int): Map<Int, AttendanceRecord>
+    suspend fun getTodayStatus(): Result<AttendanceToday?>
+    suspend fun getMonthRecords(year: Int, month: Int): Result<Map<Int, AttendanceRecord>>
 }
