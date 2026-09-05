@@ -1,6 +1,7 @@
 package com.gaden.checkin.di
 
 import com.gaden.checkin.data.auth.AuthInterceptor
+import com.gaden.checkin.data.auth.TokenAuthenticator
 import com.gaden.checkin.data.remote.ApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -18,10 +19,14 @@ import javax.inject.Singleton
 object NetworkModule {
     @Provides
     @Singleton
-    fun provideOkHttpClient(authInterceptor: AuthInterceptor): OkHttpClient {
+    fun provideOkHttpClient(
+        authInterceptor: AuthInterceptor,
+        tokenAuthenticator: TokenAuthenticator,
+    ): OkHttpClient {
         return OkHttpClient
             .Builder()
             .addInterceptor(authInterceptor)
+            .authenticator(tokenAuthenticator)
             .build()
     }
 

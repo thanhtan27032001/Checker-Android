@@ -6,6 +6,7 @@ import com.gaden.checkin.data.remote.dto.AttendanceTodayResponse
 import com.gaden.checkin.data.remote.dto.CheckInRequest
 import com.gaden.checkin.data.remote.dto.LoginRequest
 import com.gaden.checkin.data.remote.dto.LoginResponse
+import com.gaden.checkin.data.remote.dto.RefreshTokenRequest
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -15,6 +16,9 @@ import retrofit2.http.Query
 interface ApiService {
     @POST("api/auth/login")
     suspend fun login(@Body request: LoginRequest): ApiResponse<LoginResponse>
+
+    @POST("api/auth/refresh")
+    suspend fun refreshToken(@Body request: RefreshTokenRequest): ApiResponse<LoginResponse>
 
     @POST("api/attendance/check-in")
     suspend fun checkIn(@Body request: CheckInRequest): ApiResponse<AttendanceResponse>

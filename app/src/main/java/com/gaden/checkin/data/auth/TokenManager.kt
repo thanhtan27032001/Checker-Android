@@ -18,16 +18,25 @@ class TokenManager @Inject constructor(
 ) {
     private object Keys {
         val ACCESS_TOKEN = stringPreferencesKey("ACCESS_TOKEN")
+        val REFRESH_TOKEN = stringPreferencesKey("REFRESH_TOKEN")
         val EMPLOYEE_ID = stringPreferencesKey("EMPLOYEE_ID")
     }
 
     val employeeIdFlow: Flow<String?> = context.dataStore.data.map { it[Keys.EMPLOYEE_ID] }
     val accessTokenFlow: Flow<String?> = context.dataStore.data.map { it[Keys.ACCESS_TOKEN] }
+    val refreshTokenFlow: Flow<String?> = context.dataStore.data.map { it[Keys.REFRESH_TOKEN] }
 
-    suspend fun saveSession(accessToken: String, employeeId: String) {
+    suspend fun saveSession(accessToken: String, refreshToken: String, employeeId: String) {
         context.dataStore.edit {
             it[Keys.ACCESS_TOKEN] = accessToken
+            it[Keys.REFRESH_TOKEN] = refreshToken
             it[Keys.EMPLOYEE_ID] = employeeId
+        }
+    }
+
+    suspend fun clearSession() {
+        context.dataStore.edit {
+            it.clear()
         }
     }
 }

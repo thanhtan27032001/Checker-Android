@@ -15,7 +15,11 @@ class AuthRepository @Inject constructor(
             val response = apiService.login(LoginRequest(email, password))
 
             if (response.success && response.data != null) {
-                tokenManager.saveSession(response.data.accessToken, response.data.employeeId)
+                tokenManager.saveSession(
+                    response.data.accessToken,
+                    response.data.refreshToken,
+                    response.data.employeeId
+                )
                 return Result.success(Unit)
             }
             else {

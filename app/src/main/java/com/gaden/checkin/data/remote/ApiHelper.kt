@@ -23,11 +23,11 @@ suspend fun <T> safeApiCall(key: String? = null, apiCall: suspend () -> T): Resu
     }
     catch (e: HttpException) {
         val message = e.parseErrorMessage()
-        Log.e("ApiException${key?.let { "- ${key}" }}", message)
+        Log.e("ApiException", "${key?.let { "<$key>" }}\n$message")
         Result.failure(Exception(message))
     }
     catch (e: Exception) {
-        Log.e("ApiException", e.message ?: "Unknown error")
+        Log.e("ApiException", "${key?.let { "<$key>" }}\n${e.message ?: "Unknown error"}")
         Result.failure(e)
     }
 }

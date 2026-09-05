@@ -1,6 +1,8 @@
 package com.gaden.checkin.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,8 +16,16 @@ import com.gaden.checkin.presentation.splash.SplashScreen
 
 @Composable
 fun CheckInNavGraph(
+    checkInNavGraphViewModel: CheckInNavGraphViewModel = hiltViewModel(),
     navHostController: NavHostController = rememberNavController()
 ) {
+    LaunchedEffect(Unit) {
+        checkInNavGraphViewModel.sessionExpiredEvent.collect {
+            navHostController.navigate(Screen.Login.route) {
+                popUpTo(Screen.CheckIn.route) { inclusive = true }
+            }
+        }
+    }
     return NavHost(
         navController = navHostController,
         startDestination = Screen.Splash.route,
