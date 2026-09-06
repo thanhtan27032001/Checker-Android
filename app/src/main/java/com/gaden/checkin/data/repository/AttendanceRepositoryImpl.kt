@@ -1,22 +1,22 @@
 package com.gaden.checkin.data.repository
 
-import android.util.Log
 import com.gaden.checkin.data.auth.TokenManager
 import com.gaden.checkin.data.mapper.toApiString
 import com.gaden.checkin.data.mapper.toDomain
+import com.gaden.checkin.data.mapper.toMonthRecordsMap
 import com.gaden.checkin.data.remote.ApiService
 import com.gaden.checkin.data.remote.dto.CheckInRequest
-import com.gaden.checkin.data.remote.parseErrorMessage
 import com.gaden.checkin.data.remote.safeApiCall
 import com.gaden.checkin.domain.model.AttendanceRecord
 import com.gaden.checkin.domain.model.AttendanceRepository
 import com.gaden.checkin.domain.model.AttendanceToday
 import com.gaden.checkin.domain.model.CheckInMethod
-import com.gaden.checkin.domain.repository.FakeAttendanceRepository
 import kotlinx.coroutines.flow.first
-import retrofit2.HttpException
+import java.time.YearMonth
+import java.time.ZoneId
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.let
 
 @Singleton
 class AttendanceRepositoryImpl @Inject constructor(
@@ -58,6 +58,16 @@ class AttendanceRepositoryImpl @Inject constructor(
         year: Int,
         month: Int
     ): Result<Map<Int, AttendanceRecord>> {
-        return FakeAttendanceRepository().getMonthRecords(year, month)
+        val yearMonth = YearMonth.of(year, month)
+        val startDate = yearMonth.atDay(1)
+        val endDate = yearMonth.atEndOfMonth()
+
+        return safeApiCall {
+            val response = apiService.getHistory(
+                from = startDate.toString(),
+                to = endDate.toString(),
+            )
+            response.data?.toMonthRecordsMap() ?: emptyMap()
+        }
     }
 }

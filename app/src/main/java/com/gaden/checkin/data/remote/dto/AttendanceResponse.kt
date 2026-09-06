@@ -22,7 +22,7 @@ data class AttendanceResponse(
 
 @Serializable
 data class AttendanceTodayResponse(
-    val hasCheckIn: Boolean,
-    val hasCheckOut: Boolean,
+    val hasCheckIn: Boolean = false,
+    val hasCheckOut: Boolean = false,
     val record: AttendanceResponse?,
 )

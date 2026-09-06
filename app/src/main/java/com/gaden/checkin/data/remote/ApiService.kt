@@ -28,4 +28,10 @@ interface ApiService {
 
     @GET("api/attendance/today")
     suspend fun getTodayStatus(): ApiResponse<AttendanceTodayResponse?>
+
+    @GET("api/attendance/history")
+    suspend fun getHistory(
+        @Query("from") from: String? = null,
+        @Query("to") to: String? = null,
+    ): ApiResponse<List<AttendanceResponse>>
 }

@@ -11,7 +11,9 @@ import com.gaden.checkin.domain.model.CheckInMethod.BUTTON
 import com.gaden.checkin.domain.model.CheckInMethod.FACE
 import com.gaden.checkin.domain.model.CheckInMethod.GPS
 import com.gaden.checkin.domain.model.CheckInMethod.QR
+import java.time.ZoneId
 import kotlin.time.Instant
+import kotlin.time.toJavaInstant
 
 fun AttendanceResponse.toDomain(): AttendanceRecord {
     val id = this.id ?: ""
@@ -60,4 +62,22 @@ fun CheckInMethod.toApiString(): String {
         QR -> "Qr"
         FACE -> "Face"
     }
+}
+
+fun List<AttendanceResponse>.toMonthRecordsMap(): Map<Int, AttendanceRecord> {
+    val mapResult = this
+        .map { it.toDomain() }
+        .filter { it.checkinTime != null }
+        .associateBy(
+            keySelector = {
+                val dayKey = it.checkinTime!!
+                    .toJavaInstant()
+                    .atZone(ZoneId.of("Asia/Ho_Chi_Minh"))
+                    .toLocalDate()
+                    .dayOfMonth
+                dayKey
+            },
+        )
+
+    return mapResult
 }
