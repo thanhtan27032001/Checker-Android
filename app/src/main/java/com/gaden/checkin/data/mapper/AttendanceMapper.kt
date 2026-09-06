@@ -40,8 +40,8 @@ fun AttendanceResponse.toDomain(): AttendanceRecord {
 
 fun AttendanceTodayResponse.toDomain(): AttendanceToday {
     return AttendanceToday(
-        hasCheckIn = this.hasCheckIn,
-        hasCheckOut = this.hasCheckOut,
+        hasCheckIn = this.hasCheckedIn,
+        hasCheckOut = this.hasCheckedOut,
         record = this.record?.toDomain()
     )
 }

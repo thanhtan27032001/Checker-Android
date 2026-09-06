@@ -108,7 +108,7 @@ class CheckInViewModel @Inject constructor(
     private fun mapErrorToMessage(error: Throwable): String {
         return when (error.message?.contains("Network", ignoreCase = true)) {
             true -> "Network error"
-            else -> "Unknown error"
+            else -> error.message.toString()
         }
     }
 }
